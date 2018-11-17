@@ -2,6 +2,11 @@ import pygame
 from pygame.locals import *
 import time
 
+class Player(object):
+    pass
+
+class Designer(object):
+    pass
 
 def main():
     # Initialise screen
