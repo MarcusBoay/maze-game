@@ -9,17 +9,36 @@ To implement:
     - Using Pygame
     - Initialize the grid array!
         - Easy: use a for loop:
-            grid = [[0]*gridnum for n in range(gridnum)]
+            grid = [[0]*gridwid for n in range(gridhigh)]  <==== Brand new idea :O :O :O Based on the want for a rectangle maze
                 - The reason I chose to use '0' as a value for the grids is because 0 can represent an empty cell; we can then set a player to be a value of 2, perhaps, and walls can be represented by a 1 or -1. The end can be another 9.
-            grid_y = height/gridnum
-            grid_x = width/gridnum
+            grid_y = height/gridhi
+            grid_x = width/gridwid
 
     - Keyboard functionality
     - Character image
     - Grid interaction
         -  Figure out width/height of screen, figure out grid size based on that (divide screen by 10x10, do that)
-        - 
+        -  If grid[x][y] == -1, make fill the box for that grid as (0,0,0) ==> that's a wall
+        -  If grid[x][y] == 0, make fill the box for that grid as (255,255,255) ====> That's open space
+        -  If grid[x][y] == 1, make fill the box for that grid as (255,0,0) ====> that's player
+        -  If grid[x][y] == 2, make fill the box for that grid as (0,255,0) =====> That's the endpoint/goal --> CANNOT BE TURNED BLACK
+        -  If grid[x][y] == 2, make grid[x+1], grid[x-1], grid[y+1], grid[y-1] = 3 ====> Clicking cannot change a 3 to a -1.
+        -  If grid[x][y] == 1, clicking cannot change 1 to -1
+
 
 A Player Object:
     - must have y,x values
     - must move per grid value
+    - ensure cannot move off grid in any direction
+        - 'y' must be >= 0 (top); 'y' must be <= max_y (bottom) (whatever the max value for the grid of y is)
+        - 'x' must be >= 0 (left); 'x' must be <= max_x (right)
+
+Ways to implement player:
+
+Player object should have a self.move() method:
+    self.move() can be called when a key-press is detected (during game loop)
+    self.move() will change the x/y coordinate of player, depending on the character's direction - from key press
+
+
+The grid should update itself based on the new values after a self.move() call.
+
