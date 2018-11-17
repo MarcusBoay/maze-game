@@ -15,24 +15,6 @@ class Player(object):
         self.placexleftover=0
         self.placeyleftover=0
 
-def maze_update():
-    # Mouse click = turn it black
-    # Player move = turn old player pos white, turn new player pos red
-    # Make maze end = green colour
-    for i in range(len(maze)):
-        for j in range(len(maze[i])):
-            if maze[i][j] == "P":
-                # make this grid square show up as red
-                pass
-            if maze[i][j] == "E":
-                #make this grid square show up as green
-                pass
-            if maze[i][j] == "W":
-                # make this grid square show up as black
-                pass
-            if maze[i][j] == "O":
-                # make this grid square show up as white
-                pass
 
 class Designer(object):
     pass
@@ -117,7 +99,22 @@ def main():
                 player.x = nextPos[0]
                 player.y = nextPos[1]
                 player.rect.move_ip(moveOffset[0] * CELL_SIZE, moveOffset[1] * CELL_SIZE)
+            if event.type == MOUSEBUTTONDOWN:
+                click_pos = pygame.mouse.get_pos()
+                if (click_pos[0] >= gridOffset[0] and click_pos[0] <= (gridOffset[0]+CELL_SIZE*cols) and click_pos[1] >= gridOffset[1] and \
+                    click_pos[1] <= (gridOffset[1]+CELL_SIZE*rows)):
+                    click_grid = ((click_pos[0]-gridOffset[0])//CELL_SIZE,(click_pos[1]-gridOffset[1])//CELL_SIZE)
+                    if (click_grid[0] >= endPoint[0]-1 and click_grid[0] <= endPoint[0]+1) and (click_grid[1] >= endPoint[1]-1 and click_grid[1] <= endPoint[1]+1):
+                        pass
+                    elif maze[click_grid[0]][click_grid[1]] == "O":
+                        maze[click_grid[0]][click_grid[1]] = "W"
+                        # and then turn it black
+                    elif maze[click_grid[0]][click_grid[1]] == "W":
+                        maze[click_grid[0]][click_grid[1]] = "O"
+                            # and then make it white
 
+
+                
         screen.blit(background, (0, 0))
         pygame.draw.rect(screen, (0, 0, 0), player.rect)
         pygame.display.flip()
