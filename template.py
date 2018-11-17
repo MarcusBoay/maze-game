@@ -4,7 +4,13 @@ import time
 from random import randint
 
 class Player(object):
-    pass
+    def __init__(self):
+        self.image=None
+        self.rect=None
+        self.xleftover=0
+        self.yleftover=0
+        self.placexleftover=0
+        self.placeyleftover=0
 
 class Designer(object):
     pass
