@@ -4,11 +4,16 @@ import time
 from random import randint
 
 
-class Player():
-    def __init__(self, max_x, max_y):
-        self.x = randint(0, max_x - 1)
-        self.y = randint(0, max_y - 1)
-
+class Player(object):
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.image=None
+        self.rect=None
+        self.xleftover=0
+        self.yleftover=0
+        self.placexleftover=0
+        self.placeyleftover=0
 
 class Designer(object):
     pass
@@ -16,17 +21,18 @@ class Designer(object):
 
 def main():
     # test data structure for maze
-    MAZE_SIZE = 10
-    PLAYER_SIZE = 5
-    maze = [["" for i in range(MAZE_SIZE)] for j in range(MAZE_SIZE)]
-    player = Player(MAZE_SIZE, MAZE_SIZE)
+    rows = 10
+    cols = 20
+    maze = [["" for i in range(rows)] for j in range(cols)]
+    startPoint = (randint(0, 9), randint(0, 9))
     endPoint = (randint(0, 9), randint(0, 9))
-    maze[player.x][player.y] = "P"
+    maze[startPoint[0]][startPoint[1]] = "P"
     maze[endPoint[0]][endPoint[1]] = "E"
     WINDOW_WIDTH = 1000
     WINDOW_HEIGHT = 500
     CELL_SIZE = 20
     LINE_SIZE = 2
+    PLAYER_SIZE = 5
 
     # Initialise screen
     pygame.init()
@@ -42,16 +48,22 @@ def main():
     # Wall
     wall = pygame.Rect(10, 10, CELL_SIZE, CELL_SIZE)
 
+    # Player
+    player = Player(startPoint[0], startPoint[1])
+    playerModel = pygame.Rect(player.x * CELL_SIZE, player.y * CELL_SIZE, PLAYER_SIZE, PLAYER_SIZE)
+
     # Grid lines
-    for i in range(1, len(maze)+1):
+    startpoint = [100,50]
+    for i in range(0, rows + 1):
         # draw horizontal line
-        pygame.draw.line(background, (0, 0, 0), [
-                         0, i * CELL_SIZE], [len(maze) * CELL_SIZE, i * CELL_SIZE], LINE_SIZE)
+        pygame.draw.line(background, (0, 0, 0), [startpoint[0], startpoint[1] +
+                         (i * CELL_SIZE)], [startpoint[0]+(cols * CELL_SIZE), startpoint[1]+ 
+                         (i * CELL_SIZE)], LINE_SIZE)
+    for i in range(0, cols + 1):
         # draw vertical line
-        pygame.draw.line(background, (0, 0, 0), [
-                         i * CELL_SIZE, 0], [i * CELL_SIZE, len(maze) * CELL_SIZE], LINE_SIZE)
-        # Player
-        playerModel = pygame.Rect(player.x, player.y, PLAYER_SIZE, PLAYER_SIZE)
+        pygame.draw.line(background, (0, 0, 0), [startpoint[0]+
+                         (i * CELL_SIZE), startpoint[1]], [startpoint[0]+ 
+                         (i * CELL_SIZE), startpoint[1]+ (rows * CELL_SIZE)], LINE_SIZE)
 
     # Blit everything to the screen
     screen.blit(background, (0, 0))
@@ -80,7 +92,7 @@ def main():
                     moveOffset = [moveOffset[0] - 1, moveOffset[1]]
 
                 # TODO: check if collide with wall
-				# TODO: check if out of bounds
+                # TODO: check if out of bounds
                 # TODO: check if player can reach exit
 
                 player.x = nextPos[0]
