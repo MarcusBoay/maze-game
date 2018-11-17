@@ -17,7 +17,9 @@ class Designer(object):
 
 def main():
     # test data structure for maze
-    maze = [["" for i in range(10)] for j in range(10)]
+    rows = 10
+    cols = 10
+    maze = [["" for i in range(rows)] for j in range(cols)]
     startPoint = (randint(0, 9), randint(0, 9))
     endPoint = (randint(0, 9), randint(0, 9))
     maze[startPoint[0]][startPoint[1]] = "P"
@@ -42,13 +44,15 @@ def main():
     wall = pygame.Rect(10, 10, CELL_SIZE, CELL_SIZE)
 
     # Grid lines
-    for i in range(1, len(maze)+1):
+    startpoint = [0,0]
+    for i in range(1, rows + 1):
         # draw horizontal line
-        pygame.draw.line(background, (0, 0, 0), [
-                         0, i * CELL_SIZE], [len(maze) * CELL_SIZE, i * CELL_SIZE], LINE_SIZE)
+        pygame.draw.line(background, (0, 0, 0), [startpoint[0], startpoint[1] +
+                         (i * CELL_SIZE)], [cols * CELL_SIZE, i * CELL_SIZE], LINE_SIZE)
+    for i in range(1, cols + 1):
         # draw vertical line
-        pygame.draw.line(background, (0, 0, 0), [
-                         i * CELL_SIZE, 0], [i * CELL_SIZE, len(maze) * CELL_SIZE], LINE_SIZE)
+        pygame.draw.line(background, (0, 0, 0), [startpoint[0]+
+                         (i * CELL_SIZE), startpoint[1]], [i * CELL_SIZE, rows * CELL_SIZE], LINE_SIZE)
 
     # Blit everything to the screen
     screen.blit(background, (0, 0))
