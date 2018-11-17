@@ -15,6 +15,17 @@ class Player(object):
         self.placexleftover=0
         self.placeyleftover=0
 
+	def move(self, offsetX, offsetY, grid):
+		nextPos = [self.x + offsetX, self.y + offsetY]
+
+		#check for wall and grid bounds
+		if (nextPos[0] >= 0 and nextPos[0] < len(grid) and nextPos[1] >= 0 and nextPos[1] < len(grid[0])):
+			if (grid[nextPos[0]][nextPos[1]] == "O" || grid[nextPos[0]][nextPos[1]] == "E"):
+				grid[self.x][self.y] = "O"
+				grid[nextPos[0]][nextPos[1]] == "P"
+				self.x = nextPos[0]
+				self.y = nextPos[1]
+
 def maze_update():
     # Mouse click = turn it black
     # Player move = turn old player pos white, turn new player pos red
@@ -91,9 +102,9 @@ def main():
     # Event loop
     while 1:
         for event in pygame.event.get():
-            if event.type == QUIT:
+            if (event.type == QUIT):
                 return
-            if event.type == KEYDOWN:
+            if (event.type == KEYDOWN):
                 curPos = [player.x, player.y]
                 nextPos = [player.x, player.y]
                 moveOffset = [0, 0]
@@ -109,10 +120,11 @@ def main():
                 if (event.key == K_LEFT):
                     nextPos = [nextPos[0] - 1, nextPos[1]]
                     moveOffset = [moveOffset[0] - 1, moveOffset[1]]
-
+				
                 # TODO: check if collide with wall
                 # TODO: check if out of bounds
                 # TODO: check if player can reach exit
+				
 
                 player.x = nextPos[0]
                 player.y = nextPos[1]
