@@ -15,25 +15,6 @@ class Player(object):
         self.placexleftover=0
         self.placeyleftover=0
 
-def maze_update():
-    # Mouse click = turn it black
-    # Player move = turn old player pos white, turn new player pos red
-    # Make maze end = green colour
-    for i in range(len(maze)):
-        for j in range(len(maze[i])):
-            if maze[i][j] == "P":
-                # make this grid square show up as red
-                pass
-            if maze[i][j] == "E":
-                #make this grid square show up as green
-                pass
-            if maze[i][j] == "W":
-                # make this grid square show up as black
-                pass
-            if maze[i][j] == "O":
-                # make this grid square show up as white
-                pass
-            
 
 class Designer(object):
     pass
@@ -44,8 +25,8 @@ def main():
     rows = 10
     cols = 20
     maze = [["" for i in range(rows)] for j in range(cols)]
-    startPoint = (randint(0, 9), randint(0, 9))
-    endPoint = (randint(0, 9), randint(0, 9))
+    startPoint = (randint(0, cols - 1), randint(0, rows - 1))
+    endPoint = (randint(0, cols - 1), randint(0, rows - 1))
     maze[startPoint[0]][startPoint[1]] = "P"
     maze[endPoint[0]][endPoint[1]] = "E"
     WINDOW_WIDTH = 1000
@@ -53,6 +34,7 @@ def main():
     CELL_SIZE = 20
     LINE_SIZE = 2
     PLAYER_SIZE = 5
+    startpoint = [100,50]
 
     # Initialise screen
     pygame.init()
@@ -70,10 +52,9 @@ def main():
 
     # Player
     player = Player(startPoint[0], startPoint[1])
-    playerModel = pygame.Rect(player.x * CELL_SIZE, player.y * CELL_SIZE, PLAYER_SIZE, PLAYER_SIZE)
+    player.rect = pygame.Rect(player.x * CELL_SIZE + startpoint[0] + CELL_SIZE // 2 - PLAYER_SIZE // 2, player.y * CELL_SIZE + startpoint[1] + CELL_SIZE // 2 - PLAYER_SIZE // 2, PLAYER_SIZE, PLAYER_SIZE)
 
     # Grid lines
-    startpoint = [100,50]
     for i in range(0, rows + 1):
         # draw horizontal line
         pygame.draw.line(background, (0, 0, 0), [startpoint[0], startpoint[1] +
@@ -117,10 +98,10 @@ def main():
 
                 player.x = nextPos[0]
                 player.y = nextPos[1]
-                playerModel.move_ip(moveOffset[0] * CELL_SIZE, moveOffset[1] * CELL_SIZE)
+                player.rect.move_ip(moveOffset[0] * CELL_SIZE, moveOffset[1] * CELL_SIZE)
 
         screen.blit(background, (0, 0))
-        pygame.draw.rect(screen, (0, 0, 0), playerModel)
+        pygame.draw.rect(screen, (0, 0, 0), player.rect)
         pygame.display.flip()
         clock.tick(60)
 
