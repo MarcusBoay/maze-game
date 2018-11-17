@@ -39,18 +39,10 @@ def main():
     for i in range(1, len(maze)+1):
         # draw horizontal line
         pygame.draw.line(background, (0, 0, 0), [
-                         0, i * CELL_SIZE], [i * CELL_SIZE + WINDOW_WIDTH, i * CELL_SIZE], LINE_SIZE)
+                         0, i * CELL_SIZE], [len(maze) * CELL_SIZE, i * CELL_SIZE], LINE_SIZE)
         # draw vertical line
         pygame.draw.line(background, (0, 0, 0), [
-                         i * CELL_SIZE, 0], [i * CELL_SIZE, i * CELL_SIZE + WINDOW_HEIGHT], LINE_SIZE)
-
-    # Display some text
-    font = pygame.font.Font(None, 36)
-    text = font.render("Hello There", 1, (10, 10, 10))
-    textpos = text.get_rect()
-    textpos.centerx = background.get_rect().centerx
-    textpos.centery = background.get_rect().centery
-    background.blit(text, textpos)
+                         i * CELL_SIZE, 0], [i * CELL_SIZE, len(maze) * CELL_SIZE], LINE_SIZE)
 
     # Blit everything to the screen
     screen.blit(background, (0, 0))
@@ -66,7 +58,6 @@ def main():
         pygame.draw.rect(screen, (0, 0, 0), wall)
         pygame.display.flip()
         clock.tick(60)
-        wall.move_ip(1, 1)
 
 
 if __name__ == '__main__':
