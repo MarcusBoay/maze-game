@@ -63,7 +63,7 @@ def main():
     CELL_SIZE = 20
     LINE_SIZE = 2
     PLAYER_SIZE = 5
-    startpoint = [100,50]
+    gridOffset = [100,50]
 
     # Initialise screen
     pygame.init()
@@ -81,19 +81,19 @@ def main():
 
     # Player
     player = Player(startPoint[0], startPoint[1])
-    player.rect = pygame.Rect(player.x * CELL_SIZE + startpoint[0] + CELL_SIZE // 2 - PLAYER_SIZE // 2, player.y * CELL_SIZE + startpoint[1] + CELL_SIZE // 2 - PLAYER_SIZE // 2, PLAYER_SIZE, PLAYER_SIZE)
+    player.rect = pygame.Rect(player.x * CELL_SIZE + gridOffset[0] + CELL_SIZE // 2 - PLAYER_SIZE // 2, player.y * CELL_SIZE + gridOffset[1] + CELL_SIZE // 2 - PLAYER_SIZE // 2, PLAYER_SIZE, PLAYER_SIZE)
 
     # Grid lines
     for i in range(0, rows + 1):
         # draw horizontal line
-        pygame.draw.line(background, (0, 0, 0), [startpoint[0], startpoint[1] +
-                         (i * CELL_SIZE)], [startpoint[0]+(cols * CELL_SIZE), startpoint[1]+ 
+        pygame.draw.line(background, (0, 0, 0), [gridOffset[0], gridOffset[1] +
+                         (i * CELL_SIZE)], [gridOffset[0]+(cols * CELL_SIZE), gridOffset[1]+ 
                          (i * CELL_SIZE)], LINE_SIZE)
     for i in range(0, cols + 1):
         # draw vertical line
-        pygame.draw.line(background, (0, 0, 0), [startpoint[0]+
-                         (i * CELL_SIZE), startpoint[1]], [startpoint[0]+ 
-                         (i * CELL_SIZE), startpoint[1]+ (rows * CELL_SIZE)], LINE_SIZE)
+        pygame.draw.line(background, (0, 0, 0), [gridOffset[0]+
+                         (i * CELL_SIZE), gridOffset[1]], [gridOffset[0]+ 
+                         (i * CELL_SIZE), gridOffset[1]+ (rows * CELL_SIZE)], LINE_SIZE)
 
     # Blit everything to the screen
     screen.blit(background, (0, 0))
