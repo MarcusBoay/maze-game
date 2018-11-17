@@ -11,10 +11,14 @@ def main():
     endPoint = (randint(0, 9), randint(0, 9))
     maze[startPoint[0]][startPoint[1]] = "P"
     maze[endPoint[0]][endPoint[1]] = "E"
+    WINDOW_WIDTH = 1000
+    WINDOW_HEIGHT = 500
+    CELL_SIZE = 20
+    LINE_SIZE = 2
 
     # Initialise screen
     pygame.init()
-    screen = pygame.display.set_mode((1000, 500))
+    screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
     pygame.display.set_caption('Basic Pygame program')
     clock = pygame.time.Clock()
 
@@ -24,10 +28,16 @@ def main():
     background.fill((250, 250, 250))
 
     # Wall
-    wall = pygame.Rect(10, 10, 10, 10)
+    wall = pygame.Rect(10, 10, CELL_SIZE, CELL_SIZE)
 
     # Grid lines
-    
+    for i in range(1, len(maze)+1):
+        # draw horizontal line
+        pygame.draw.line(background, (0, 0, 0), [
+                         0, i * CELL_SIZE], [i * CELL_SIZE + WINDOW_WIDTH, i * CELL_SIZE], LINE_SIZE)
+        # draw vertical line
+        pygame.draw.line(background, (0, 0, 0), [
+                         i * CELL_SIZE, 0], [i * CELL_SIZE, i * CELL_SIZE + WINDOW_HEIGHT], LINE_SIZE)
 
     # Display some text
     font = pygame.font.Font(None, 36)
