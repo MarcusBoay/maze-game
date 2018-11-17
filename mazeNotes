@@ -1,0 +1,13 @@
+Idea: two player maze game, where one person navigates maze, other person moves to block said person from goal
+
+Player 1 uses keyboard
+Player 2 uses mouse
+Mouse click blacks out a grid square
+
+To implement:
+    - GUI?
+    - Using Pygame
+    - Initialize the grid array!
+    - Keyboard functionality
+    - Character image
+    - Grid interaction
