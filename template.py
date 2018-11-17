@@ -3,6 +3,11 @@ from pygame.locals import *
 import time
 from random import randint
 
+class Player(object):
+    pass
+
+class Designer(object):
+    pass
 
 def main():
     # test data structure for maze
