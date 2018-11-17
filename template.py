@@ -20,7 +20,7 @@ class Player(object):
 
         #check for wall and grid bounds
         if (nextPos[0] >= 0 and nextPos[0] < len(grid) and nextPos[1] >= 0 and nextPos[1] < len(grid[0])):
-            if (grid[nextPos[0]][nextPos[1]] == "O" || grid[nextPos[0]][nextPos[1]] == "E"):
+            if (grid[nextPos[0]][nextPos[1]] == "O" or grid[nextPos[0]][nextPos[1]] == "E"):
                 grid[self.x][self.y] = "O"
                 grid[nextPos[0]][nextPos[1]] == "P"
                 self.x = nextPos[0]
@@ -105,29 +105,18 @@ def main():
             if (event.type == QUIT):
                 return
             if (event.type == KEYDOWN):
-                curPos = [player.x, player.y]
-                nextPos = [player.x, player.y]
                 moveOffset = [0, 0]
                 if (event.key == K_DOWN):
-                    nextPos = [nextPos[0], nextPos[1] + 1]
                     moveOffset = [moveOffset[0], moveOffset[1] + 1]
                 if (event.key == K_UP):
-                    nextPos = [nextPos[0], nextPos[1] - 1]
                     moveOffset = [moveOffset[0], moveOffset[1] - 1]
                 if (event.key == K_RIGHT):
-                    nextPos = [nextPos[0] + 1, nextPos[1]]
                     moveOffset = [moveOffset[0] + 1, moveOffset[1]]
                 if (event.key == K_LEFT):
-                    nextPos = [nextPos[0] - 1, nextPos[1]]
                     moveOffset = [moveOffset[0] - 1, moveOffset[1]]
-                
-                # TODO: check if collide with wall
-                # TODO: check if out of bounds
                 # TODO: check if player can reach exit
-                
-
-                player.x = nextPos[0]
-                player.y = nextPos[1]
+                player.move(moveOffset[0], moveOffset[1], maze)
+                currentPos= [player.rect.left, player.rect.top]
                 player.rect.move_ip(moveOffset[0] * CELL_SIZE, moveOffset[1] * CELL_SIZE)
 
         screen.blit(background, (0, 0))
