@@ -8,9 +8,18 @@ To implement:
     - GUI?
     - Using Pygame
     - Initialize the grid array!
+        - Easy: use a for loop:
+            grid = [[0]*gridnum for n in range(gridnum)]
+                - The reason I chose to use '0' as a value for the grids is because 0 can represent an empty cell; we can then set a player to be a value of 2, perhaps, and walls can be represented by a 1 or -1. The end can be another 9.
+            grid_y = height/gridnum
+            grid_x = width/gridnum
+
     - Keyboard functionality
     - Character image
     - Grid interaction
+        -  Figure out width/height of screen, figure out grid size based on that (divide screen by 10x10, do that)
+        - 
 
-
-i made change
+A Player Object:
+    - must have y,x values
+    - must move per grid value
