@@ -7,15 +7,13 @@ class Player(object):
     def __init__(self, x, y):
         self.x = x
         self.y = y
-        self.image = None
         self.rect = None
-        self.xleftover = 0
-        self.yleftover = 0
-        self.placexleftover = 0
-        self.placeyleftover = 0
 
+    #Will try to move the player in the grid, return values are (message, hasMoved, previous positions)
     def move(self, offsetX, offsetY, grid):
         nextPos = [self.x + offsetX, self.y + offsetY]
+        prevX = self.x
+        prevY = self.y
 
         # check for grid bounds
         if (nextPos[0] >= 0 and nextPos[0] < len(grid) and nextPos[1] >= 0 and nextPos[1] < len(grid[0])):
@@ -25,10 +23,10 @@ class Player(object):
                 grid[nextPos[0]][nextPos[1]] = "P"
                 self.x = nextPos[0]
                 self.y = nextPos[1]
-                return ""
-            return "found a wall"
+                return "", True, [prevX, prevY]
+            return "found a wall", False, [prevX, prevY]
         else:
-            return "found a boundary"
+            return "found a boundary", False, [prevX, prevY]
 
 
 class Game(object):
@@ -80,12 +78,14 @@ class Game(object):
         if (event.key == K_LEFT):
             moveOffset = [moveOffset[0] - 1, moveOffset[1]]
         # TODO: check if player can reach exit
-        message = player.move(moveOffset[0], moveOffset[1], self.maze)
+        message, hasMoved, prevPlayerPos = player.move(moveOffset[0], moveOffset[1], self.maze)
         playerXwin = player.x * self.CELL_SIZE + \
             self.gridOffset[0] + self.CELL_SIZE // 2 - self.PLAYER_SIZE // 2
         playerYwin = player.y * self.CELL_SIZE + \
             self.gridOffset[1] + self.CELL_SIZE // 2 - self.PLAYER_SIZE // 2
         player.rect = pygame.Rect(playerXwin, playerYwin, self.PLAYER_SIZE, self.PLAYER_SIZE)
+        if (hasMoved):
+            self.color_change(prevPlayerPos[0], prevPlayerPos[1])
         self.color_change(player.x, player.y)
 
         return message
@@ -164,7 +164,6 @@ class Game(object):
         square = pygame.Rect((self.gridOffset[0]+(self.CELL_SIZE*x)+2),
                     (self.gridOffset[1]+(self.CELL_SIZE*y)+2), self.CELL_SIZE-2, self.CELL_SIZE-2)
         code = self.maze[x][y]
-        print(self.maze)
 
         if code == "W":
             pygame.draw.rect(self.background, black, square, 0)
