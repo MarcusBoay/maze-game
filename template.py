@@ -20,12 +20,18 @@ class Player(object):
         # check for grid bounds
         if (nextPos[0] >= 0 and nextPos[0] < len(grid) and nextPos[1] >= 0 and nextPos[1] < len(grid[0])):
             # check for walls
-            if (grid[nextPos[0]][nextPos[1]] == "O" or grid[nextPos[0]][nextPos[1]] == "E"):
+            if (grid[nextPos[0]][nextPos[1]] == "O"):
                 grid[self.x][self.y] = "O"
                 grid[nextPos[0]][nextPos[1]] = "P"
                 self.x = nextPos[0]
                 self.y = nextPos[1]
                 return "", True, [prevX, prevY]
+            elif (grid[nextPos[0]][nextPos[1]] == "E"):
+                grid[self.x][self.y] = "O"
+                grid[nextPos[0]][nextPos[1]] = "P"
+                self.x = nextPos[0]
+                self.y = nextPos[1]
+                return "win", True, [prevX, prevY]
             return "found a wall", False, [prevX, prevY]
         else:
             return "found a boundary", False, [prevX, prevY]
@@ -50,8 +56,8 @@ class Game(object):
         self.background = None
         self.screen = None
         self.clock = None
-        self.dSound = pygame.image.load("dsound.png")
-        self.eSound = pygame.image.load("esound.png")
+        self.dSound = pygame.image.load("dSound.png")
+        self.eSound = pygame.image.load("eSound.png")
         self.title = pygame.image.load("logo.png")
         self.mode = pygame.image.load("mode.png")
         self.difficulty = pygame.image.load("difficulty.png")
@@ -95,7 +101,9 @@ class Game(object):
             self.gridOffset[1] + self.CELL_SIZE // 2 - self.PLAYER_SIZE // 2
         player.rect = pygame.Rect(playerXwin, playerYwin, self.PLAYER_SIZE, self.PLAYER_SIZE)
         if (hasMoved):
-            if (self.soundMode):
+            if message == "win":
+                pass
+            if (self.soundMode):            
                 self.c_step.play(self.s_step)
             self.color_change(prevPlayerPos[0], prevPlayerPos[1])
         else:
