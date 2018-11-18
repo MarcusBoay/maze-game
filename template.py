@@ -50,6 +50,8 @@ class Game(object):
         self.background = None
         self.screen = None
         self.clock = None
+        self.dSound = pygame.image.load("dsound.png")
+        self.eSound = pygame.image.load("esound.png")
         self.title = pygame.image.load("logo.png")
         self.mode = pygame.image.load("mode.png")
         self.difficulty = pygame.image.load("difficulty.png")
@@ -129,6 +131,7 @@ class Game(object):
                 self.c_wall_build.play(self.s_wall_build)
                 # and then make it white
                 return ""
+            #elif click_pos <= 
             else:
                 return "click outside grid"
 
@@ -151,6 +154,10 @@ class Game(object):
             self.screen.blit(self.mode,(30,200))
             self.screen.blit(self.difficulty,(30,290))
             pygame.draw.rect(self.screen, (0, 0, 0), player.rect)
+            if True:
+                self.screen.blit(self.eSound,(130,420))
+            else:
+                self.screen.blit(self.dSound,(130,420))
             pygame.display.flip()
             self.clock.tick(60)
 
@@ -219,6 +226,7 @@ class Game(object):
         self.screen.blit(self.title, (0,0))
         self.screen.blit(self.mode,(30,200))
         self.screen.blit(self.difficulty,(30,290))
+        self.screen.blit(self.eSound,(60,340))
         pygame.display.flip()
 
         # Event loop
