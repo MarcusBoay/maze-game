@@ -115,7 +115,7 @@ def main():
                         # and then turn it black
                     elif maze[click_grid[0]][click_grid[1]] == "W":
                         maze[click_grid[0]][click_grid[1]] = "O"
-                            # and then make it white
+                        # and then make it white
 
 
                 
