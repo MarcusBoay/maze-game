@@ -2,6 +2,7 @@ import pygame
 from pygame.locals import *
 import time
 from random import randint
+import collections
 
 class Player(object):
     def __init__(self, x, y):
@@ -32,7 +33,7 @@ class Player(object):
 class Game(object):
     def __init__(self):
         self.rows = 15
-        self.cols = 20
+        self.cols = 15
         self.maze = [["O" for i in range(self.rows)] for j in range(self.cols)]
         self.startPoint = (randint(0, self.cols - 1), randint(0, self.rows - 1))
         self.endPoint = (randint(0, self.cols - 1), randint(0, self.rows - 1))
@@ -91,16 +92,21 @@ class Game(object):
         return message
 
     # Handle behaviour when mouse button pressed in window, returns message of string data-type
-    def handleMousePress(self):
+    def handleMousePress(self, player):
         click_pos = pygame.mouse.get_pos()
         if (click_pos[0] >= self.gridOffset[0] and click_pos[0] <= (self.gridOffset[0]+self.CELL_SIZE*self.cols) and click_pos[1] >= self.gridOffset[1] and click_pos[1] <= (self.gridOffset[1]+ self.CELL_SIZE*self.rows)):
             click_grid = ((click_pos[0]-self.gridOffset[0])//self.CELL_SIZE,     (click_pos[1]-self.gridOffset[1])//self.CELL_SIZE)
+            validPathBool = self.hasValidPath(player)
             if (click_grid[0] >= self.endPoint[0]-1 and click_grid[0] <= self.endPoint[0]+1) and (click_grid[1] >= self.endPoint[1]-1 and click_grid[1] <= self.endPoint[1]+1):
                 return "forbidden area"
             elif self.maze[click_grid[0]][click_grid[1]] == "P":
                 return "clicked on player"
-            elif self.maze[click_grid[0]][click_grid[1]] == "O":
+            elif (self.maze[click_grid[0]][click_grid[1]] == "O"):
                 self.maze[click_grid[0]][click_grid[1]] = "W"
+                validPathBool = self.hasValidPath(player)
+                if (validPathBool is False):
+                    self.maze[click_grid[0]][click_grid[1]] = "O"
+                    return "NO VALID PATH"
                 self.color_change(click_grid[0], click_grid[1])
                 # and then turn it black
                 return ""
@@ -121,7 +127,7 @@ class Game(object):
                 if (event.type == KEYDOWN):
                     message = self.handleKeyPress(event, player)
                 if event.type == MOUSEBUTTONDOWN:
-                    message = self.handleMousePress()
+                    message = self.handleMousePress(player)
 
                 if message != "":
                     print (message)
@@ -130,6 +136,37 @@ class Game(object):
             pygame.draw.rect(self.screen, (0, 0, 0), player.rect)
             pygame.display.flip()
             self.clock.tick(60)
+
+    # Searches for a valid path from player to end point, returns a bool indicating existence of a valid path
+    def hasValidPath(self, player):
+        visitedGrid = [[0 for i in range(self.rows)] for j in range(self.cols)]
+        queue = collections.deque([[player.x, player.y]])
+
+        while (queue):
+            curPos = queue.popleft()
+            visitedGrid[curPos[0]][curPos[1]] = 1
+
+            #check if exit has been searched
+            if (visitedGrid[self.endPoint[0]][self.endPoint[1]] == 1):
+                return True
+
+            #add 4 directions from current position
+            if (curPos[0] - 1 >= 0 and self.maze[curPos[0] - 1][curPos[1]] != "W" and visitedGrid[curPos[0] - 1][curPos[1]] == 0):
+                queue.append([curPos[0] - 1, curPos[1]])
+                visitedGrid[curPos[0] - 1][curPos[1]] = 1
+            if (curPos[0] + 1 < self.cols and self.maze[curPos[0] + 1][curPos[1]] != "W"  and visitedGrid[curPos[0] + 1][curPos[1]] == 0):
+                queue.append([curPos[0] + 1, curPos[1]])
+                visitedGrid[curPos[0] + 1][curPos[1]] = 1
+            if (curPos[1] - 1 >= 0 and self.maze[curPos[0]][curPos[1] - 1] != "W" and visitedGrid[curPos[0]][curPos[1] - 1] == 0):
+                queue.append([curPos[0], curPos[1] - 1])
+                visitedGrid[curPos[0]][curPos[1] - 1] = 1
+            if (curPos[1] + 1 < self.rows and self.maze[curPos[0]][curPos[1] + 1] != "W" and visitedGrid[curPos[0]][curPos[1] + 1] == 0):
+                queue.append([curPos[0], curPos[1] + 1])
+                visitedGrid[curPos[0]][curPos[1] + 1] = 1
+
+        #no valid path found
+        return False
+                
 
     def main(self):
          # Initialise screen
@@ -172,16 +209,12 @@ class Game(object):
 
         if code == "W":
             pygame.draw.rect(self.background, black, square, 0)
-            print("color change: w")
         if code == "O":
-            self.background.fill(white, square)
-            print("color change: o")
+            pygame.draw.rect(self.background, white, square, 0)
         if code == "E":
-            self.background.fill(green, square)
-            print("color change: e")
+            pygame.draw.rect(self.background, green, square, 0)
         if code == "P":
             pygame.draw.rect(self.background, red, square, 0)
-            print("color change: p")
 
 
 def main():
