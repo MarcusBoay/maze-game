@@ -103,7 +103,8 @@ class Game(object):
         player.rect = pygame.Rect(playerXwin, playerYwin, self.PLAYER_SIZE, self.PLAYER_SIZE)
         if (hasMoved):
             if message == "win":
-                pass
+                self.pWins = True
+                self.state = "end"
             if (self.soundMode):            
                 self.c_step.play(self.s_step)
             self.color_change(prevPlayerPos[0], prevPlayerPos[1])
@@ -176,7 +177,7 @@ class Game(object):
         self.screen.blit(self.eSound,(135,420))
         pygame.display.flip()
         message = ""
-        while 1:
+        while self.state == "game":
             for event in pygame.event.get():
                 if (event.type == QUIT):
                     return
@@ -279,10 +280,12 @@ class Game(object):
         while 1:
             if self.state == "start":
                 self.startLoop()
-            if self.state == "game":
+            elif self.state == "game":
                 self.eventLoop()
-            if self.state == "end":
+            elif self.state == "end":
                 self.endLoop()
+            elif self.state == "quit":
+                return
     
     def color_change(self, x, y):
         black = (0, 0, 0)
@@ -316,7 +319,36 @@ class Game(object):
         self.c_wrong = pygame.mixer.Channel(4)
 
     def startLoop(self):
-        self.background = pygame.Surface(self.)
+        self.state = "game"
+
+    def endLoop(self):
+        self.background = pygame.Surface(self.screen.get_size())
+        self.background = self.background.convert()
+        self.background.fill((255,255,255))
+        if self.pWins:
+            self.endScene = pygame.image.load("pWins.png")
+        else:
+            self.endScene = pygame.image.load("dWins.png")
+        self.screen.blit(self.background, (0, 0))
+        self.screen.blit(self.endScene, (0, 0))
+        if self.soundMode:
+            self.screen.blit(self.eSound,(135,420))
+        else:
+            self.screen.blit(self.dSound,(135,420))
+        pygame.display.flip()
+        while 1:
+            for event in pygame.event.get():
+                if (event.type == QUIT):
+                    self.state = "quit"
+                    return
+                if event.type == MOUSEBUTTONDOWN:
+                    self.endMousePress()
+    
+    def endMousePress(self):
+        self.state = "start"
+
+
+
 
         
 def main():
