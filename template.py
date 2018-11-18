@@ -18,13 +18,18 @@ class Player(object):
     def move(self, offsetX, offsetY, grid):
         nextPos = [self.x + offsetX, self.y + offsetY]
 
-        #check for wall and grid bounds
+        #check for grid bounds
         if (nextPos[0] >= 0 and nextPos[0] < len(grid) and nextPos[1] >= 0 and nextPos[1] < len(grid[0])):
+            # check for walls
             if (grid[nextPos[0]][nextPos[1]] == "O" or grid[nextPos[0]][nextPos[1]] == "E"):
                 grid[self.x][self.y] = "O"
                 grid[nextPos[0]][nextPos[1]] == "P"
                 self.x = nextPos[0]
                 self.y = nextPos[1]
+                return ""
+            return "found a wall"
+        else:
+            return "found a boundary"
 
 class Game(object):
     def __init__(self):
@@ -33,7 +38,7 @@ class Game(object):
 
 def main():
     # test data structure for maze
-    rows = 10
+    rows = 15
     cols = 20
     maze = [["O" for i in range(rows)] for j in range(cols)]
     startPoint = (randint(0, cols - 1), randint(0, rows - 1))
@@ -42,10 +47,10 @@ def main():
     maze[endPoint[0]][endPoint[1]] = "E"
     WINDOW_WIDTH = 1000
     WINDOW_HEIGHT = 500
-    CELL_SIZE = 20
+    CELL_SIZE = 30
     LINE_SIZE = 2
     PLAYER_SIZE = 5
-    gridOffset = [100,50]
+    gridOffset = [350,30]
 
     # Initialise screen
     pygame.init()
@@ -84,6 +89,7 @@ def main():
     pygame.display.flip()
 
     # Event loop
+    message = ""
     while 1:
         for event in pygame.event.get():
             if (event.type == QUIT):
@@ -99,23 +105,30 @@ def main():
                 if (event.key == K_LEFT):
                     moveOffset = [moveOffset[0] - 1, moveOffset[1]]
                 # TODO: check if player can reach exit
-                player.move(moveOffset[0], moveOffset[1], maze)
+                message = player.move(moveOffset[0], moveOffset[1], maze)
                 playerXwin = player.x * CELL_SIZE + gridOffset[0] + CELL_SIZE // 2 - PLAYER_SIZE // 2
                 playerYwin  = player.y * CELL_SIZE + gridOffset[1] + CELL_SIZE // 2 - PLAYER_SIZE // 2
                 player.rect = pygame.Rect(playerXwin, playerYwin, PLAYER_SIZE, PLAYER_SIZE)
+
             if event.type == MOUSEBUTTONDOWN:
                 click_pos = pygame.mouse.get_pos()
                 if (click_pos[0] >= gridOffset[0] and click_pos[0] <= (gridOffset[0]+CELL_SIZE*cols) and click_pos[1] >= gridOffset[1] and \
                     click_pos[1] <= (gridOffset[1]+CELL_SIZE*rows)):
                     click_grid = ((click_pos[0]-gridOffset[0])//CELL_SIZE,(click_pos[1]-gridOffset[1])//CELL_SIZE)
                     if (click_grid[0] >= endPoint[0]-1 and click_grid[0] <= endPoint[0]+1) and (click_grid[1] >= endPoint[1]-1 and click_grid[1] <= endPoint[1]+1):
-                        pass
+                        message = "forbidden area"
+                    elif maze[click_grid[0]][click_grid[1]] == "P":
+                        message = "clicked on player"
                     elif maze[click_grid[0]][click_grid[1]] == "O":
                         maze[click_grid[0]][click_grid[1]] = "W"
                         # and then turn it black
                     elif maze[click_grid[0]][click_grid[1]] == "W":
                         maze[click_grid[0]][click_grid[1]] = "O"
                             # and then make it white
+                else:
+                    message = "click outside grid"
+            if message != "":
+                print (message)
 
 
                 
