@@ -208,7 +208,7 @@ class Game(object):
             if self.dif_mode == 0.1:
                 timer = 24
             clock_text = clock_font.render("15", 0, [0,0,0])
-            self.screen.blit(clock_text, (900,150))
+            # self.screen.blit(clock_text, (900,150))
         pygame.display.flip()
         while self.state == "game":
             if (time.time() - self.game_clock >= 15) and self.pressure:
@@ -220,6 +220,8 @@ class Game(object):
                     clock_text = clock_font.render("%d" % timer, 0, [0,0,0])
                     self.screen.blit(clock_text, (900,150))
                     pygame.display.flip()
+            elif not self.pressure:
+                clock_text = clock_font.render("inf.", 0, [0,0,0])
             for event in pygame.event.get():
                 if (event.type == QUIT):
                     self.state = "quit"
@@ -232,7 +234,6 @@ class Game(object):
                 if message != "":
                     print (message)
             timer = (15 - (time.time() - self.game_clock))
-            clock_text = clock_font.render("%d" % timer, 0, [0,0,0])
             if self.pressure:
                 self.screen.blit(clock_text, (900,150))
             self.screen.blit(self.background, (0, 0))
@@ -240,7 +241,7 @@ class Game(object):
             self.screen.blit(self.mode,(30,200))
             self.screen.blit(self.difficulty,(30,290))
             pygame.draw.rect(self.screen, (0, 0, 0), player.rect)
-            
+            self.screen.blit(clock_text, (900,150))
             if self.soundMode:
                 self.screen.blit(self.eSound,(135,420))
             else:
