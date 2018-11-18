@@ -6,10 +6,12 @@ import collections
 import pygame.mixer
 
 class Player(object):
-    def __init__(self, x, y):
+    def __init__(self, x, y, dif):
         self.x = x
         self.y = y
         self.rect = None
+        self.move_time = 0.0
+        self.play_dif = dif
 
     #Will try to move the player in the grid, return values are (message, hasMoved, previous positions)
     def move(self, offsetX, offsetY, grid):
@@ -18,7 +20,7 @@ class Player(object):
         prevY = self.y
 
         # check for grid bounds
-        if (nextPos[0] >= 0 and nextPos[0] < len(grid) and nextPos[1] >= 0 and nextPos[1] < len(grid[0])):
+        if (nextPos[0] >= 0 and nextPos[0] < len(grid) and nextPos[1] >= 0 and nextPos[1] < len(grid[0])) and ((time.time() - self.move_time) >= self.play_dif):
             # check for walls
             if (grid[nextPos[0]][nextPos[1]] == "O"):
                 grid[self.x][self.y] = "O"
@@ -63,10 +65,13 @@ class Game(object):
         self.difficulty = pygame.image.load("difficulty.png")
         self.soundMode = True
         self.state = "start"
+        self.dif_mode = 0
+        self.game_clock = 0
+        self.pWins = False
 
 
     def initializePlayer(self):
-        player = Player(self.startPoint[0], self.startPoint[1])
+        player = Player(self.startPoint[0], self.startPoint[1], self.dif_mode)
         playerXwin = player.x * self.CELL_SIZE + \
             self.gridOffset[0] + self.CELL_SIZE // 2 - self.PLAYER_SIZE // 2
         playerYwin = player.y * self.CELL_SIZE + \
@@ -102,6 +107,7 @@ class Game(object):
             self.gridOffset[1] + self.CELL_SIZE // 2 - self.PLAYER_SIZE // 2
         player.rect = pygame.Rect(playerXwin, playerYwin, self.PLAYER_SIZE, self.PLAYER_SIZE)
         if (hasMoved):
+            player.move_time = time.time()
             if message == "win":
                 self.pWins = True
                 self.state = "end"
@@ -156,6 +162,11 @@ class Game(object):
             return "click outside grid"
 
     def eventLoop(self):
+        self.maze = [["O" for i in range(self.rows)] for j in range(self.cols)]
+        self.startPoint = (randint(0, self.cols - 1), randint(0, self.rows - 1))
+        self.endPoint = (randint(0, self.cols - 1), randint(0, self.rows - 1))
+        self.maze[self.startPoint[0]][self.startPoint[1]] = "P"
+        self.maze[self.endPoint[0]][self.endPoint[1]] = "E"
         # Fill background
         self.background = pygame.Surface(self.screen.get_size())
         self.background = self.background.convert()
@@ -177,7 +188,22 @@ class Game(object):
         self.screen.blit(self.eSound,(135,420))
         pygame.display.flip()
         message = ""
+        clock_font = pygame.font.SysFont("timesnewroman",30)
+        self.game_clock = time.time()
+        timer = 15
+        clock_text = clock_font.render("15", 0, [0,0,0])
+        self.screen.blit(clock_text, (900,150))
+        pygame.display.flip()
         while self.state == "game":
+            if (time.time() - self.game_clock >= 15):
+                self.state = "end"
+                continue
+            else:
+                if (15 - (time.time() - self.game_clock)) != timer:
+                    timer = (15 - (time.time() - self.game_clock))
+                    clock_text = clock_font.render("%d" % timer, 0, [0,0,0])
+                    self.screen.blit(clock_text, (900,150))
+                    pygame.display.flip()
             for event in pygame.event.get():
                 if (event.type == QUIT):
                     self.state = "quit"
@@ -289,11 +315,11 @@ class Game(object):
         self.screen.blit(self.background, (0, 0))
         title_font = pygame.font.SysFont("timesnewroman",50)
         start_font = pygame.font.SysFont("timesnewroman", 15)
-        start_text = start_font.render("Press (s) to begin",0, [0,0,0])
+        start_text = start_font.render("Choose difficulty to begin: (1) Easy, (2), Normal, (3) Hard",0, [0,0,0])
         title_text = title_font.render("The A-MAZE-ing Race", 0 , [0,0,0])
         name_text = start_font.render("A game by Rafaella Grandma, Keven Smelly, and Marcus BOYEEEEEEE", 0, [0,0,0])
         self.screen.blit(name_text, (260,265))
-        self.screen.blit(start_text, (400,250))
+        self.screen.blit(start_text, (275,250))
         self.screen.blit(title_text, (250,200))
         pygame.display.flip()
         while 1:
@@ -302,7 +328,16 @@ class Game(object):
                     self.state = "quit"
                     return
                 if (event.type == KEYDOWN):
-                    if event.key == K_s:
+                    if event.key == K_1:
+                        self.dif_mode = 0.10
+                        self.state = "game"
+                        return
+                    elif event.key == K_2:
+                        self.dif_mode = 0.125
+                        self.state = "game"
+                        return
+                    elif event.key == K_3:
+                        self.dif_mode = 0.15
                         self.state = "game"
                         return
 
