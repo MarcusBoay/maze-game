@@ -184,21 +184,21 @@ class Game(object):
         pygame.display.flip()
         player = self.initializePlayer()
         self.initializeSound()
-        countdown_font = pygame.font.SysFont("", 70)
+        countdown_font = pygame.font.SysFont("", 300)
         countdown_text = countdown_font.render("3", 0, [0,0,0])
-        self.screen.blit(countdown_text, (470, 285))
+        self.screen.blit(countdown_text, (470, 100))
         pygame.display.flip()
-        time.sleep(0.5)
+        time.sleep(1)
         self.screen.blit(self.background, (0,0))
         countdown_text = countdown_font.render("2", 0, [0,0,0])
-        self.screen.blit(countdown_text, (470, 285))
+        self.screen.blit(countdown_text, (470, 100))
         pygame.display.flip()
-        time.sleep(0.5)
+        time.sleep(1)
         self.screen.blit(self.background, (0,0))
         countdown_text = countdown_font.render("1", 0, [0,0,0])
-        self.screen.blit(countdown_text, (470, 285))
+        self.screen.blit(countdown_text, (470, 100))
         pygame.display.flip()
-        time.sleep(0.5)
+        time.sleep(1)
         self.drawGrid()
         self.color_change(self.endPoint[0],self.endPoint[1])
         self.color_change(player.x, player.y)
@@ -219,15 +219,15 @@ class Game(object):
             self.game_clock = time.time()
             if self.dif_mode == 0.125:
                 timer = 20
-                dif_text = modedif_font.render("Easy", 0,[0,0,0])
+                dif_text = modedif_font.render("Medium", 0,[0,0,0])
                 self.screen.blit(dif_text, (35, 320))
             if self.dif_mode == 0.15:
                 timer = 15
-                dif_text = modedif_font.render("Medium", 0,[0,0,0])
+                dif_text = modedif_font.render("Hard", 0,[0,0,0])
                 self.screen.blit(dif_text, (30, 320))
             if self.dif_mode == 0.1:
                 timer = 24
-                dif_text = modedif_font.render("Hard", 0,[0,0,0])
+                dif_text = modedif_font.render("Easy", 0,[0,0,0])
                 self.screen.blit(dif_text, (35, 320))
             clock_text = clock_font.render("15", 0, [0,0,0])
             # self.screen.blit(clock_text, (900,150))
@@ -243,7 +243,7 @@ class Game(object):
                     self.screen.blit(clock_text, (900,150))
                     pygame.display.flip()
             elif not self.pressure:
-                clock_text = clock_font.render("inf.", 0, [0,0,0])
+                clock_text = clock_font.render("", 0, [0,0,0])
             for event in pygame.event.get():
                 if (event.type == QUIT):
                     self.state = "quit"
