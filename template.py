@@ -207,6 +207,8 @@ class Game(object):
         self.screen.blit(self.background, (0, 0))
         self.screen.blit(self.title, (0,0))
         self.screen.blit(self.mode,(30,200))
+        modedif_font = pygame.font.SysFont("",20)
+
         self.screen.blit(self.difficulty,(30,290))
         self.screen.blit(self.eSound,(135,420))
         pygame.display.flip()
@@ -217,10 +219,16 @@ class Game(object):
             self.game_clock = time.time()
             if self.dif_mode == 0.125:
                 timer = 20
+                dif_text = modedif_font.render("Easy", 0,[0,0,0])
+                self.screen.blit(dif_text, (35, 320))
             if self.dif_mode == 0.15:
                 timer = 15
+                dif_text = modedif_font.render("Medium", 0,[0,0,0])
+                self.screen.blit(dif_text, (30, 320))
             if self.dif_mode == 0.1:
                 timer = 24
+                dif_text = modedif_font.render("Hard", 0,[0,0,0])
+                self.screen.blit(dif_text, (35, 320))
             clock_text = clock_font.render("15", 0, [0,0,0])
             # self.screen.blit(clock_text, (900,150))
         pygame.display.flip()
@@ -260,6 +268,22 @@ class Game(object):
                 self.screen.blit(self.eSound,(135,420))
             else:
                 self.screen.blit(self.dSound,(135,420))
+            if self.pressure:
+                mode_text = modedif_font.render("Under Pressure", 0, [0,0,0])
+                self.screen.blit(mode_text, (15, 230))
+            else:
+                mode_text = modedif_font.render("No Pressure", 0, [0,0,0])
+                self.screen.blit(mode_text, (25, 230))
+
+            if self.dif_mode == 0.125:
+                dif_text = modedif_font.render("Easy", 0,[0,0,0])
+                self.screen.blit(dif_text, (35, 320))
+            elif self.dif_mode == 0.15:
+                dif_text = modedif_font.render("Medium", 0,[0,0,0])
+                self.screen.blit(dif_text, (30, 320))
+            elif self.dif_mode == 0.1:
+                dif_text = modedif_font.render("Hard", 0,[0,0,0])
+                self.screen.blit(dif_text, (35, 320))
             pygame.display.flip()
             self.clock.tick(60)
 
@@ -352,6 +376,8 @@ class Game(object):
         start_font = pygame.font.SysFont("timesnewroman", 20)
 
         name_text = start_font.render("A game by Rafaella Grandma, Keven Smelly, and Marcus BOYEEEEEEE", 0, [0,0,0])
+        start_text = start_font.render("Select difficulty with (1) (2) or (3); click on 'no pressure' to select between timed or not timed modes", 0, [0,0,0])
+        instructions_text = start_font.render("Get to the blue square using the arrow keys while mouse cursor clicks to hinder your path with walls!", 0, [0,0,0])
         self.screen.blit(self.title,(500-(350/2),50))
         if self.dif_mode == 1:
             self.screen.blit(self.diff1Press,(300,270))
@@ -370,6 +396,8 @@ class Game(object):
         else:
             self.screen.blit(self.noPress,(440,360))
         self.screen.blit(name_text, (260,230))
+        self.screen.blit(start_text, (10, 400))
+        self.screen.blit(instructions_text, (10, 10))
         pygame.display.flip()
         while 1:
             for event in pygame.event.get():
@@ -409,6 +437,9 @@ class Game(object):
             else:
                 self.screen.blit(self.noPress,(440,360))
             self.screen.blit(name_text, (260,230))
+            self.screen.blit(name_text, (260,230))
+            self.screen.blit(start_text, (70, 450))
+            self.screen.blit(instructions_text, (60, 25))
             pygame.display.flip()
 
 
