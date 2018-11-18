@@ -197,8 +197,9 @@ class Game(object):
         self.screen.blit(self.eSound,(135,420))
         pygame.display.flip()
         message = ""
+        clock_font = pygame.font.SysFont("futura",30)
         if self.pressure:
-            clock_font = pygame.font.SysFont("futura",30)
+            
             self.game_clock = time.time()
             if self.dif_mode == 0.125:
                 timer = 20
@@ -232,12 +233,14 @@ class Game(object):
                     print (message)
             timer = (15 - (time.time() - self.game_clock))
             clock_text = clock_font.render("%d" % timer, 0, [0,0,0])
+            if self.pressure:
+                self.screen.blit(clock_text, (900,150))
             self.screen.blit(self.background, (0, 0))
             self.screen.blit(self.title, (0,0))
             self.screen.blit(self.mode,(30,200))
             self.screen.blit(self.difficulty,(30,290))
             pygame.draw.rect(self.screen, (0, 0, 0), player.rect)
-            self.screen.blit(clock_text, (900,150))
+            
             if self.soundMode:
                 self.screen.blit(self.eSound,(135,420))
             else:
