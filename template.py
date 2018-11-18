@@ -62,6 +62,7 @@ class Game(object):
         self.mode = pygame.image.load("mode.png")
         self.difficulty = pygame.image.load("difficulty.png")
         self.soundMode = True
+        self.state = "start"
 
 
     def initializePlayer(self):
@@ -153,7 +154,27 @@ class Game(object):
         else:
             return "click outside grid"
 
-    def eventLoop(self, player):
+    def eventLoop(self):
+        # Fill background
+        self.background = pygame.Surface(self.screen.get_size())
+        self.background = self.background.convert()
+        self.background.fill((250, 250, 250))
+        player = self.initializePlayer()
+        self.initializeSound()
+
+        self.drawGrid()
+        self.color_change(self.endPoint[0],self.endPoint[1])
+        self.color_change(player.x, player.y)
+        self.color_change(self.endPoint[0],self.endPoint[1])
+        self.color_change(player.x, player.y)
+
+        # Blit everything to the screen
+        self.screen.blit(self.background, (0, 0))
+        self.screen.blit(self.title, (0,0))
+        self.screen.blit(self.mode,(30,200))
+        self.screen.blit(self.difficulty,(30,290))
+        self.screen.blit(self.eSound,(135,420))
+        pygame.display.flip()
         message = ""
         while 1:
             for event in pygame.event.get():
@@ -217,38 +238,51 @@ class Game(object):
         self.clock = pygame.time.Clock()
         pygame.mixer.init()
 
+        #self.startLoop()
+
+
+
         # Fill background
-        self.background = pygame.Surface(self.screen.get_size())
-        self.background = self.background.convert()
-        self.background.fill((250, 250, 250))
+        #self.background = pygame.Surface(self.screen.get_size())
+        #self.background = self.background.convert()
+        #self.background.fill((250, 250, 250))
 
         # Wall
-        wall = pygame.Rect(10, 10, self.CELL_SIZE, self.CELL_SIZE)
+        # wall = pygame.Rect(10, 10, self.CELL_SIZE, self.CELL_SIZE)
 
         # Player Object Initialization
-        player = self.initializePlayer()
+        #player = self.initializePlayer()
 
         # Initialize Sounds
         # wall_hit, click_on_player, step, wall_build, wrong = self.initializeSound()
 
-        self.initializeSound()
+        #self.initializeSound()
 
-        self.drawGrid()
+        #self.drawGrid()
 
         # colors the initial player position and exit point
-        self.color_change(self.endPoint[0],self.endPoint[1])
-        self.color_change(player.x, player.y)
+        # self.color_change(self.endPoint[0],self.endPoint[1])
+        # self.color_change(player.x, player.y)
 
         # Blit everything to the screen
-        self.screen.blit(self.background, (0, 0))
-        self.screen.blit(self.title, (0,0))
-        self.screen.blit(self.mode,(30,200))
-        self.screen.blit(self.difficulty,(30,290))
-        self.screen.blit(self.eSound,(135,420))
-        pygame.display.flip()
+        # self.screen.blit(self.background, (0, 0))
+        # self.screen.blit(self.title, (0,0))
+        # self.screen.blit(self.mode,(30,200))
+        # self.screen.blit(self.difficulty,(30,290))
+        # self.screen.blit(self.eSound,(135,420))
+        # pygame.display.flip()
 
         # Event loop
-        self.eventLoop(player)
+
+        # self.eventLoop()
+
+        while 1:
+            if self.state == "start":
+                self.startLoop()
+            if self.state == "game":
+                self.eventLoop()
+            if self.state == "end":
+                self.endLoop()
     
     def color_change(self, x, y):
         black = (0, 0, 0)
@@ -280,6 +314,9 @@ class Game(object):
         self.c_step = pygame.mixer.Channel(2)
         self.c_wall_build = pygame.mixer.Channel(3)
         self.c_wrong = pygame.mixer.Channel(4)
+
+    def startLoop(self):
+        self.background = pygame.Surface(self.)
 
         
 def main():
