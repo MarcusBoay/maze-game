@@ -175,6 +175,7 @@ class Game(object):
             return "click outside grid"
 
     def eventLoop(self):
+        self.pWins = False
         self.maze = [["O" for i in range(self.rows)] for j in range(self.cols)]
         self.startPoint = (randint(0, self.cols - 1), randint(0, self.rows - 1))
         self.endPoint = (randint(0, self.cols - 1), randint(0, self.rows - 1))
@@ -280,13 +281,13 @@ class Game(object):
                 self.screen.blit(mode_text, (25, 230))
 
             if self.dif_mode == 0.125:
-                dif_text = modedif_font.render("Easy", 0,[0,0,0])
+                dif_text = modedif_font.render("Medium", 0,[0,0,0])
                 self.screen.blit(dif_text, (35, 320))
             elif self.dif_mode == 0.15:
-                dif_text = modedif_font.render("Medium", 0,[0,0,0])
+                dif_text = modedif_font.render("Hard", 0,[0,0,0])
                 self.screen.blit(dif_text, (30, 320))
             elif self.dif_mode == 0.1:
-                dif_text = modedif_font.render("Hard", 0,[0,0,0])
+                dif_text = modedif_font.render("Easy", 0,[0,0,0])
                 self.screen.blit(dif_text, (35, 320))
             pygame.display.flip()
             self.clock.tick(60)
