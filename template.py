@@ -3,6 +3,12 @@ from pygame.locals import *
 import time
 from random import randint
 
+WINDOW_WIDTH = 1000
+WINDOW_HEIGHT = 500
+CELL_SIZE = 30
+LINE_SIZE = 2
+PLAYER_SIZE = 5
+gridOffset = [350,30]
 
 def color_change(x, y, maze, offset, CELL_SIZE, screen):
     black = (0,0,0)
