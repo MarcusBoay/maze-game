@@ -152,6 +152,7 @@ class Game(object):
         self.drawGrid()
 
         self.color_change(self.endPoint[0],self.endPoint[1])
+        self.color_change(player.x, player.y)
 
         # Blit everything to the screen
         self.screen.blit(self.background, (0, 0))
