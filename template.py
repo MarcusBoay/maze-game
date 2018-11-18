@@ -139,9 +139,11 @@ class Game(object):
                     self.c_wall_build.play(self.s_wall_build)
                 # and then make it white
                 return ""
-            #elif click_pos <= 
-            else:
-                return "click outside grid"
+        elif (click_pos[0] > 135 and click_pos[0] < 195 and click_pos[1] > 420 and click_pos[1] < 480):
+            self.soundMode = not self.soundMode
+            return "toggled sound"
+        else:
+            return "click outside grid"
 
     def eventLoop(self, player):
         message = ""
@@ -162,10 +164,10 @@ class Game(object):
             self.screen.blit(self.mode,(30,200))
             self.screen.blit(self.difficulty,(30,290))
             pygame.draw.rect(self.screen, (0, 0, 0), player.rect)
-            if True:
-                self.screen.blit(self.eSound,(130,420))
+            if self.soundMode:
+                self.screen.blit(self.eSound,(135,420))
             else:
-                self.screen.blit(self.dSound,(130,420))
+                self.screen.blit(self.dSound,(135,420))
             pygame.display.flip()
             self.clock.tick(60)
 
@@ -234,7 +236,7 @@ class Game(object):
         self.screen.blit(self.title, (0,0))
         self.screen.blit(self.mode,(30,200))
         self.screen.blit(self.difficulty,(30,290))
-        self.screen.blit(self.eSound,(60,340))
+        self.screen.blit(self.eSound,(135,420))
         pygame.display.flip()
 
         # Event loop
