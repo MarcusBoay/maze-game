@@ -236,14 +236,14 @@ class Game(object):
         self.screen = pygame.display.set_mode((self.WINDOW_WIDTH, self.WINDOW_HEIGHT))
         pygame.display.set_caption('Basic Pygame program')
         self.clock = pygame.time.Clock()
-        pygame.mixer.init()
+        pygame.mixer.init() 
 
         #self.startLoop()
 
 
 
         # Fill background
-        #self.background = pygame.Surface(self.screen.get_size())
+        #self.background = pygame.Surface(self.screen.get_size())                       
         #self.background = self.background.convert()
         #self.background.fill((250, 250, 250))
 
@@ -272,7 +272,7 @@ class Game(object):
         # self.screen.blit(self.eSound,(135,420))
         # pygame.display.flip()
 
-        # Event loop
+        # Event eventLoop
 
         # self.eventLoop()
 
