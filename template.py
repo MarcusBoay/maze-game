@@ -22,7 +22,7 @@ class Player(object):
             # check for walls
             if (grid[nextPos[0]][nextPos[1]] == "O" or grid[nextPos[0]][nextPos[1]] == "E"):
                 grid[self.x][self.y] = "O"
-                grid[nextPos[0]][nextPos[1]] == "P"
+                grid[nextPos[0]][nextPos[1]] = "P"
                 self.x = nextPos[0]
                 self.y = nextPos[1]
                 return ""
@@ -164,6 +164,7 @@ class Game(object):
         square = pygame.Rect((self.gridOffset[0]+(self.CELL_SIZE*x)+2),
                     (self.gridOffset[1]+(self.CELL_SIZE*y)+2), self.CELL_SIZE-2, self.CELL_SIZE-2)
         code = self.maze[x][y]
+        print(self.maze)
 
         if code == "W":
             pygame.draw.rect(self.background, black, square, 0)
@@ -175,7 +176,7 @@ class Game(object):
             self.background.fill(green, square)
             print("color change: e")
         if code == "P":
-            pygame.draw.rect(self.screen, red, square, 0)
+            pygame.draw.rect(self.background, red, square, 0)
             print("color change: p")
 
 
