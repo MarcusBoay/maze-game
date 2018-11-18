@@ -50,8 +50,8 @@ class Game(object):
         self.background = None
         self.screen = None
         self.clock = None
-        self.dSound = pygame.image.load("dsound.png")
-        self.eSound = pygame.image.load("esound.png")
+        self.dSound = pygame.image.load("dSound.png")
+        self.eSound = pygame.image.load("eSound.png")
         self.title = pygame.image.load("logo.png")
         self.mode = pygame.image.load("mode.png")
         self.difficulty = pygame.image.load("difficulty.png")
@@ -213,9 +213,6 @@ class Game(object):
         self.background = pygame.Surface(self.screen.get_size())
         self.background = self.background.convert()
         self.background.fill((250, 250, 250))
-
-        # Wall
-        wall = pygame.Rect(10, 10, self.CELL_SIZE, self.CELL_SIZE)
 
         # Player Object Initialization
         player = self.initializePlayer()
