@@ -33,6 +33,7 @@ class Player(object):
 
 class Game(object):
     def __init__(self):
+        pygame.init()
         self.rows = 15
         self.cols = 15
         self.maze = [["O" for i in range(self.rows)] for j in range(self.cols)]
@@ -49,6 +50,9 @@ class Game(object):
         self.background = None
         self.screen = None
         self.clock = None
+        self.title = pygame.image.load("logo.png")
+        self.mode = pygame.image.load("mode.png")
+        self.difficulty = pygame.image.load("difficulty.png")
 
 
     def initializePlayer(self):
@@ -143,6 +147,9 @@ class Game(object):
                     print (message)
 
             self.screen.blit(self.background, (0, 0))
+            self.screen.blit(self.title, (0,0))
+            self.screen.blit(self.mode,(30,200))
+            self.screen.blit(self.difficulty,(30,290))
             pygame.draw.rect(self.screen, (0, 0, 0), player.rect)
             pygame.display.flip()
             self.clock.tick(60)
@@ -180,7 +187,6 @@ class Game(object):
 
     def main(self):
          # Initialise screen
-        pygame.init()
         self.screen = pygame.display.set_mode((self.WINDOW_WIDTH, self.WINDOW_HEIGHT))
         pygame.display.set_caption('Basic Pygame program')
         self.clock = pygame.time.Clock()
@@ -204,11 +210,15 @@ class Game(object):
 
         self.drawGrid()
 
+        # colors the initial player position and exit point
         self.color_change(self.endPoint[0],self.endPoint[1])
         self.color_change(player.x, player.y)
 
         # Blit everything to the screen
         self.screen.blit(self.background, (0, 0))
+        self.screen.blit(self.title, (0,0))
+        self.screen.blit(self.mode,(30,200))
+        self.screen.blit(self.difficulty,(30,290))
         pygame.display.flip()
 
         # Event loop
@@ -216,8 +226,8 @@ class Game(object):
     
     def color_change(self, x, y):
         black = (0, 0, 0)
-        green = (0, 255, 0)
-        red = (255, 0, 0)
+        green = (54, 159, 217)
+        red = (237, 17, 104)
         white = (255, 255, 255)
         square = pygame.Rect((self.gridOffset[0]+(self.CELL_SIZE*x)+2),
                     (self.gridOffset[1]+(self.CELL_SIZE*y)+2), self.CELL_SIZE-2, self.CELL_SIZE-2)
