@@ -310,6 +310,14 @@ class Game(object):
         self.background.fill((250, 250, 250))
         self.screen.blit(self.background, (0, 0))
         title_font = pygame.font.SysFont("timesnewroman",50)
+<<<<<<< HEAD
+        start_font = pygame.font.SysFont("timesnewroman", 20)
+        start_text = start_font.render("Press (s) to begin",0, [0,0,0])
+        name_text = start_font.render("A game by Rafaella Grandma, Keven Smelly, and Marcus BOYEEEEEEE", 0, [0,0,0])
+        self.screen.blit(self.title,(500-(350/2),50))
+        self.screen.blit(name_text, (150,265))
+        self.screen.blit(start_text, (250,250))
+=======
         start_font = pygame.font.SysFont("timesnewroman", 15)
         start_text = start_font.render("Choose difficulty to begin: (1) Easy, (2), Normal, (3) Hard",0, [0,0,0])
         title_text = title_font.render("The A-MAZE-ing Race", 0 , [0,0,0])
@@ -317,6 +325,7 @@ class Game(object):
         self.screen.blit(name_text, (260,265))
         self.screen.blit(start_text, (275,250))
         self.screen.blit(title_text, (250,200))
+>>>>>>> 58d6cdcbb3e3ebfef80f5d51cefa41bdf14cac5e
         pygame.display.flip()
         while 1:
             for event in pygame.event.get():
