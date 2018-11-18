@@ -26,15 +26,16 @@ class Player(object):
                 self.x = nextPos[0]
                 self.y = nextPos[1]
 
-class Designer(object):
-    pass
+class Game(object):
+    def __init__(self):
+        pass
 
 
 def main():
     # test data structure for maze
     rows = 10
     cols = 20
-    maze = [["" for i in range(rows)] for j in range(cols)]
+    maze = [["O" for i in range(rows)] for j in range(cols)]
     startPoint = (randint(0, cols - 1), randint(0, rows - 1))
     endPoint = (randint(0, cols - 1), randint(0, rows - 1))
     maze[startPoint[0]][startPoint[1]] = "P"
@@ -44,7 +45,7 @@ def main():
     CELL_SIZE = 20
     LINE_SIZE = 2
     PLAYER_SIZE = 5
-    startpoint = [100,50]
+    gridOffset = [100,50]
 
     # Initialise screen
     pygame.init()
@@ -60,21 +61,23 @@ def main():
     # Wall
     wall = pygame.Rect(10, 10, CELL_SIZE, CELL_SIZE)
 
-    # Player
+    # Player Obkect Initialization
     player = Player(startPoint[0], startPoint[1])
-    player.rect = pygame.Rect(player.x * CELL_SIZE + startpoint[0] + CELL_SIZE // 2 - PLAYER_SIZE // 2, player.y * CELL_SIZE + startpoint[1] + CELL_SIZE // 2 - PLAYER_SIZE // 2, PLAYER_SIZE, PLAYER_SIZE)
+    playerXwin = player.x * CELL_SIZE + gridOffset[0] + CELL_SIZE // 2 - PLAYER_SIZE // 2
+    playerYwin  = player.y * CELL_SIZE + gridOffset[1] + CELL_SIZE // 2 - PLAYER_SIZE // 2
+    player.rect = pygame.Rect(playerXwin, playerYwin, PLAYER_SIZE, PLAYER_SIZE)
 
     # Grid lines
     for i in range(0, rows + 1):
         # draw horizontal line
-        pygame.draw.line(background, (0, 0, 0), [startpoint[0], startpoint[1] +
-                         (i * CELL_SIZE)], [startpoint[0]+(cols * CELL_SIZE), startpoint[1]+ 
+        pygame.draw.line(background, (0, 0, 0), [gridOffset[0], gridOffset[1] +
+                         (i * CELL_SIZE)], [gridOffset[0]+(cols * CELL_SIZE), gridOffset[1]+ 
                          (i * CELL_SIZE)], LINE_SIZE)
     for i in range(0, cols + 1):
         # draw vertical line
-        pygame.draw.line(background, (0, 0, 0), [startpoint[0]+
-                         (i * CELL_SIZE), startpoint[1]], [startpoint[0]+ 
-                         (i * CELL_SIZE), startpoint[1]+ (rows * CELL_SIZE)], LINE_SIZE)
+        pygame.draw.line(background, (0, 0, 0), [gridOffset[0]+
+                         (i * CELL_SIZE), gridOffset[1]], [gridOffset[0]+ 
+                         (i * CELL_SIZE), gridOffset[1]+ (rows * CELL_SIZE)], LINE_SIZE)
 
     # Blit everything to the screen
     screen.blit(background, (0, 0))
@@ -97,8 +100,9 @@ def main():
                     moveOffset = [moveOffset[0] - 1, moveOffset[1]]
                 # TODO: check if player can reach exit
                 player.move(moveOffset[0], moveOffset[1], maze)
-                currentPos= [player.rect.left, player.rect.top]
-                player.rect.move_ip(moveOffset[0] * CELL_SIZE, moveOffset[1] * CELL_SIZE)
+                playerXwin = player.x * CELL_SIZE + gridOffset[0] + CELL_SIZE // 2 - PLAYER_SIZE // 2
+                playerYwin  = player.y * CELL_SIZE + gridOffset[1] + CELL_SIZE // 2 - PLAYER_SIZE // 2
+                player.rect = pygame.Rect(playerXwin, playerYwin, PLAYER_SIZE, PLAYER_SIZE)
             if event.type == MOUSEBUTTONDOWN:
                 click_pos = pygame.mouse.get_pos()
                 if (click_pos[0] >= gridOffset[0] and click_pos[0] <= (gridOffset[0]+CELL_SIZE*cols) and click_pos[1] >= gridOffset[1] and \
