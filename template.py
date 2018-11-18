@@ -101,10 +101,12 @@ class Game(object):
                 return "clicked on player"
             elif self.maze[click_grid[0]][click_grid[1]] == "O":
                 self.maze[click_grid[0]][click_grid[1]] = "W"
+                self.color_change(click_grid[0], click_grid[1])
                 # and then turn it black
                 return ""
             elif self.maze[click_grid[0]][click_grid[1]] == "W":
                 self.maze[click_grid[0]][click_grid[1]] = "O"
+                self.color_change(click_grid[0], click_grid[1])
                 # and then make it white
                 return ""
             else:
@@ -148,6 +150,8 @@ class Game(object):
         player = self.initializePlayer()
 
         self.drawGrid()
+
+        self.color_change(self.endPoint[0],self.endPoint[1])
 
         # Blit everything to the screen
         self.screen.blit(self.background, (0, 0))
