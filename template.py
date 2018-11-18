@@ -3,6 +3,7 @@ from pygame.locals import *
 import time
 from random import randint
 import collections
+import pygame.mixer
 
 class Player(object):
     def __init__(self, x, y):
@@ -49,6 +50,7 @@ class Game(object):
         self.screen = None
         self.clock = None
 
+
     def initializePlayer(self):
         player = Player(self.startPoint[0], self.startPoint[1])
         playerXwin = player.x * self.CELL_SIZE + \
@@ -86,7 +88,10 @@ class Game(object):
             self.gridOffset[1] + self.CELL_SIZE // 2 - self.PLAYER_SIZE // 2
         player.rect = pygame.Rect(playerXwin, playerYwin, self.PLAYER_SIZE, self.PLAYER_SIZE)
         if (hasMoved):
+            self.s_step.play()
             self.color_change(prevPlayerPos[0], prevPlayerPos[1])
+        else:
+            self.s_wall_hit.play()
         self.color_change(player.x, player.y)
 
         return message
@@ -98,21 +103,26 @@ class Game(object):
             click_grid = ((click_pos[0]-self.gridOffset[0])//self.CELL_SIZE,     (click_pos[1]-self.gridOffset[1])//self.CELL_SIZE)
             validPathBool = self.hasValidPath(player)
             if (click_grid[0] >= self.endPoint[0]-1 and click_grid[0] <= self.endPoint[0]+1) and (click_grid[1] >= self.endPoint[1]-1 and click_grid[1] <= self.endPoint[1]+1):
+                self.s_wrong.play()
                 return "forbidden area"
             elif self.maze[click_grid[0]][click_grid[1]] == "P":
+                self.s_click_on_player.play()
                 return "clicked on player"
             elif (self.maze[click_grid[0]][click_grid[1]] == "O"):
                 self.maze[click_grid[0]][click_grid[1]] = "W"
                 validPathBool = self.hasValidPath(player)
                 if (validPathBool is False):
                     self.maze[click_grid[0]][click_grid[1]] = "O"
+                    self.s_wrong.play()
                     return "NO VALID PATH"
+                self.s_wall_build.play()
                 self.color_change(click_grid[0], click_grid[1])
                 # and then turn it black
                 return ""
             elif self.maze[click_grid[0]][click_grid[1]] == "W":
                 self.maze[click_grid[0]][click_grid[1]] = "O"
                 self.color_change(click_grid[0], click_grid[1])
+                self.s_wall_build.play()
                 # and then make it white
                 return ""
             else:
@@ -174,6 +184,7 @@ class Game(object):
         self.screen = pygame.display.set_mode((self.WINDOW_WIDTH, self.WINDOW_HEIGHT))
         pygame.display.set_caption('Basic Pygame program')
         self.clock = pygame.time.Clock()
+        pygame.mixer.init()
 
         # Fill background
         self.background = pygame.Surface(self.screen.get_size())
@@ -185,6 +196,11 @@ class Game(object):
 
         # Player Object Initialization
         player = self.initializePlayer()
+
+        # Initialize Sounds
+        # wall_hit, click_on_player, step, wall_build, wrong = self.initializeSound()
+
+        self.initializeSound()
 
         self.drawGrid()
 
@@ -217,6 +233,14 @@ class Game(object):
             pygame.draw.rect(self.background, red, square, 0)
 
 
+    def initializeSound(self):
+        self.s_wall_hit = pygame.mixer.Sound('wall_hit.wav')
+        self.s_click_on_player = pygame.mixer.Sound('click_on_player.wav')
+        self.s_step = pygame.mixer.Sound('step.wav')
+        self.s_wall_build = pygame.mixer.Sound('wall_build.wav')
+        self.s_wrong = pygame.mixer.Sound('wrong.wav')
+
+        
 def main():
     game = Game()
     game.main()
