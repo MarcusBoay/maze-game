@@ -86,6 +86,7 @@ class Game(object):
         playerYwin = player.y * self.CELL_SIZE + \
             self.gridOffset[1] + self.CELL_SIZE // 2 - self.PLAYER_SIZE // 2
         player.rect = pygame.Rect(playerXwin, playerYwin, self.PLAYER_SIZE, self.PLAYER_SIZE)
+        self.color_change(player.x, player.y)
 
         return message
 
@@ -155,22 +156,27 @@ class Game(object):
         # Event loop
         self.eventLoop(player)
     
-    def color_change(self, x, y, maze, offset, CELL_SIZE, screen):
+    def color_change(self, x, y):
         black = (0, 0, 0)
         green = (0, 255, 0)
         red = (255, 0, 0)
         white = (255, 255, 255)
-        square = pygame.Rect((offset[0]+(self.CELL_SIZE*x)+2),
-                    (offset[1]+(self.CELL_SIZE*y)+2), self.CELL_SIZE-2, self.CELL_SIZE-2)
+        square = pygame.Rect((self.gridOffset[0]+(self.CELL_SIZE*x)+2),
+                    (self.gridOffset[1]+(self.CELL_SIZE*y)+2), self.CELL_SIZE-2, self.CELL_SIZE-2)
         code = self.maze[x][y]
+
         if code == "W":
-            screen.fill(black, square)
+            pygame.draw.rect(self.background, black, square, 0)
+            print("color change: w")
         if code == "O":
-            screen.fill(white, square)
+            self.background.fill(white, square)
+            print("color change: o")
         if code == "E":
-            screen.fill(green, square)
+            self.background.fill(green, square)
+            print("color change: e")
         if code == "P":
-            screen.fill(red, square)
+            pygame.draw.rect(self.screen, red, square, 0)
+            print("color change: p")
 
 
 def main():
