@@ -65,9 +65,18 @@ class Game(object):
         self.difficulty = pygame.image.load("difficulty.png")
         self.soundMode = True
         self.state = "start"
-        self.dif_mode = 0
+        self.dif_mode = 0.125
+        self.pressure = False
         self.game_clock = 0
         self.pWins = False
+        self.diff1 = pygame.image.load("diff1.png")
+        self.diff2 = pygame.image.load("diff2.png")
+        self.diff3 = pygame.image.load("diff3.png")
+        self.diff1Press = pygame.image.load("diff1Press.png")
+        self.diff2Press = pygame.image.load("diff2Press.png")
+        self.diff3Press = pygame.image.load("diff3Press.png")
+        self.noPress = pygame.image.load("noPress.png")
+        self.underPress = pygame.image.load("underPressure.png")
 
 
     def initializePlayer(self):
@@ -188,17 +197,23 @@ class Game(object):
         self.screen.blit(self.eSound,(135,420))
         pygame.display.flip()
         message = ""
-        clock_font = pygame.font.SysFont("timesnewroman",30)
-        self.game_clock = time.time()
-        timer = 15
-        clock_text = clock_font.render("15", 0, [0,0,0])
-        self.screen.blit(clock_text, (900,150))
+        if self.pressure:
+            clock_font = pygame.font.SysFont("timesnewroman",30)
+            self.game_clock = time.time()
+            if self.dif_mode == 0.125:
+                timer = 20
+            if self.dif_mode == 0.15:
+                timer = 15
+            if self.dif_mode == 0.1:
+                timer = 24
+            clock_text = clock_font.render("15", 0, [0,0,0])
+            self.screen.blit(clock_text, (900,150))
         pygame.display.flip()
         while self.state == "game":
-            if (time.time() - self.game_clock >= 15):
+            if (time.time() - self.game_clock >= 15) and self.pressure:
                 self.state = "end"
                 continue
-            else:
+            elif self.pressure:
                 if (15 - (time.time() - self.game_clock)) != timer:
                     timer = (15 - (time.time() - self.game_clock))
                     clock_text = clock_font.render("%d" % timer, 0, [0,0,0])
@@ -313,23 +328,28 @@ class Game(object):
         self.background = self.background.convert()
         self.background.fill((250, 250, 250))
         self.screen.blit(self.background, (0, 0))
-        title_font = pygame.font.SysFont("timesnewroman",50)
-<<<<<<< HEAD
+
         start_font = pygame.font.SysFont("timesnewroman", 20)
-        start_text = start_font.render("Press (s) to begin",0, [0,0,0])
+
         name_text = start_font.render("A game by Rafaella Grandma, Keven Smelly, and Marcus BOYEEEEEEE", 0, [0,0,0])
         self.screen.blit(self.title,(500-(350/2),50))
-        self.screen.blit(name_text, (150,265))
-        self.screen.blit(start_text, (250,250))
-=======
-        start_font = pygame.font.SysFont("timesnewroman", 15)
-        start_text = start_font.render("Choose difficulty to begin: (1) Easy, (2), Normal, (3) Hard",0, [0,0,0])
-        title_text = title_font.render("The A-MAZE-ing Race", 0 , [0,0,0])
-        name_text = start_font.render("A game by Rafaella Grandma, Keven Smelly, and Marcus BOYEEEEEEE", 0, [0,0,0])
-        self.screen.blit(name_text, (260,265))
-        self.screen.blit(start_text, (275,250))
-        self.screen.blit(title_text, (250,200))
->>>>>>> 58d6cdcbb3e3ebfef80f5d51cefa41bdf14cac5e
+        if self.dif_mode == 1:
+            self.screen.blit(self.diff1Press,(300,270))
+            self.screen.blit(self.diff2,(440,270))
+            self.screen.blit(self.diff3,(580,270))
+        elif self.dif_mode == 2:
+            self.screen.blit(self.diff1,(300,270))
+            self.screen.blit(self.diff2Press,(440,270))
+            self.screen.blit(self.diff3,(580,270))
+        elif self.dif_mode == 3:
+            self.screen.blit(self.diff1,(300,270))
+            self.screen.blit(self.diff2,(440,270))
+            self.screen.blit(self.diff3Press,(580,270))
+        if self.pressure:
+            self.screen.blit(self.underPress,(440,360))
+        else:
+            self.screen.blit(self.noPress,(440,360))
+        self.screen.blit(name_text, (260,230))
         pygame.display.flip()
         while 1:
             for event in pygame.event.get():
@@ -339,16 +359,38 @@ class Game(object):
                 if (event.type == KEYDOWN):
                     if event.key == K_1:
                         self.dif_mode = 0.10
-                        self.state = "game"
-                        return
                     elif event.key == K_2:
                         self.dif_mode = 0.125
-                        self.state = "game"
-                        return
                     elif event.key == K_3:
                         self.dif_mode = 0.15
+                    elif event.key == K_s:
                         self.state = "game"
                         return
+                if (event.type == MOUSEBUTTONDOWN):
+                    pos = pygame.mouse.get_pos()
+                    if pos[0]> 440 and pos[0]< 560 and pos[1] >360 and pos[1]<436:
+                        self.pressure = not self.pressure
+            self.screen.blit(self.background, (0, 0))
+            self.screen.blit(self.title,(500-(350/2),50))
+            if self.dif_mode == 0.10:
+                self.screen.blit(self.diff1Press,(300,270))
+                self.screen.blit(self.diff2,(440,270))
+                self.screen.blit(self.diff3,(580,270))
+            elif self.dif_mode == 0.125:
+                self.screen.blit(self.diff1,(300,270))
+                self.screen.blit(self.diff2Press,(440,270))
+                self.screen.blit(self.diff3,(580,270))
+            elif self.dif_mode == 0.15:
+                self.screen.blit(self.diff1,(300,270))
+                self.screen.blit(self.diff2,(440,270))
+                self.screen.blit(self.diff3Press,(580,270))
+            if self.pressure:
+                self.screen.blit(self.underPress,(440,360))
+            else:
+                self.screen.blit(self.noPress,(440,360))
+            self.screen.blit(name_text, (260,230))
+            pygame.display.flip()
+
 
     def endLoop(self):
         self.background = pygame.Surface(self.screen.get_size())
