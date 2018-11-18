@@ -179,6 +179,7 @@ class Game(object):
         while 1:
             for event in pygame.event.get():
                 if (event.type == QUIT):
+                    self.state = "quit"
                     return
                 if (event.type == KEYDOWN):
                     message = self.handleKeyPress(event, player)
@@ -238,44 +239,6 @@ class Game(object):
         self.clock = pygame.time.Clock()
         pygame.mixer.init() 
 
-        #self.startLoop()
-
-
-
-        # Fill background
-        #self.background = pygame.Surface(self.screen.get_size())                       
-        #self.background = self.background.convert()
-        #self.background.fill((250, 250, 250))
-
-        # Wall
-        # wall = pygame.Rect(10, 10, self.CELL_SIZE, self.CELL_SIZE)
-
-        # Player Object Initialization
-        #player = self.initializePlayer()
-
-        # Initialize Sounds
-        # wall_hit, click_on_player, step, wall_build, wrong = self.initializeSound()
-
-        #self.initializeSound()
-
-        #self.drawGrid()
-
-        # colors the initial player position and exit point
-        # self.color_change(self.endPoint[0],self.endPoint[1])
-        # self.color_change(player.x, player.y)
-
-        # Blit everything to the screen
-        # self.screen.blit(self.background, (0, 0))
-        # self.screen.blit(self.title, (0,0))
-        # self.screen.blit(self.mode,(30,200))
-        # self.screen.blit(self.difficulty,(30,290))
-        # self.screen.blit(self.eSound,(135,420))
-        # pygame.display.flip()
-
-        # Event eventLoop
-
-        # self.eventLoop()
-
         while 1:
             if self.state == "start":
                 self.startLoop()
@@ -283,6 +246,8 @@ class Game(object):
                 self.eventLoop()
             if self.state == "end":
                 self.endLoop()
+            if self.state == "quit":
+                return
     
     def color_change(self, x, y):
         black = (0, 0, 0)
@@ -316,9 +281,30 @@ class Game(object):
         self.c_wrong = pygame.mixer.Channel(4)
 
     def startLoop(self):
-        self.background = pygame.Surface(self.)
-
-        
+        self.screen = pygame.display.set_mode((self.WINDOW_WIDTH, self.WINDOW_HEIGHT))
+        self.background = pygame.Surface(self.screen.get_size())
+        self.background = self.background.convert()
+        self.background.fill((250, 250, 250))
+        self.screen.blit(self.background, (0, 0))
+        title_font = pygame.font.SysFont("timesnewroman",50)
+        start_font = pygame.font.SysFont("timesnewroman", 15)
+        start_text = start_font.render("Press (s) to begin",0, [0,0,0])
+        title_text = title_font.render("The A-MAZE-ing Race", 0 , [0,0,0])
+        name_text = start_font.render("A game by Rafaella Grandma, Keven Smelly, and Marcus BOYEEEEEEE", 0, [0,0,0])
+        self.screen.blit(name_text, (260,265))
+        self.screen.blit(start_text, (400,250))
+        self.screen.blit(title_text, (250,200))
+        pygame.display.flip()
+        while 1:
+            for event in pygame.event.get():
+                if (event.type == QUIT):
+                    self.state = "quit"
+                    return
+                if (event.type == KEYDOWN):
+                    if event.key == K_s:
+                        self.state = "game"
+                        return
+                    
 def main():
     game = Game()
     game.main()
